@@ -108,6 +108,12 @@ if (isset($_POST['finish']))
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>INSTALLATION PAGE</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script type="text/javascript">
+		function clear()
+		{
+			document.getElementById("qtsx").reset();
+		}
+	</script>
 	<style type="text/css">
 body {
     font-family: helvetica;
@@ -161,20 +167,12 @@ legend {
 	font-size: 22px;
 	font-weight: bold;
 }
-form input#xacnhan{
-	font-weight: bold;
-
-}
 form input#msnv{
 	font-weight: bold;
 	font-size:20px ;
 }
 
 form input#hoten{
-	font-weight: bold;
-	font-size:20px ;
-}
-form input#nhap_msnv{
 	font-weight: bold;
 	font-size:20px ;
 }
@@ -186,9 +184,10 @@ form input#nhap_msnv{
     		<h1 id="ten">INSTALLATION</h1>
     	</div>
     	<div>
-    		<div style="width: 20%; float:left;"><input type="text" class="form-control" value="EMPLOYEE ID:" readonly id="nhap_msnv"></input></div>
-			<div style="width: 20%; float:left;"><input type="text" class="form-control" name="nhap_msnv" id="nhap_msnv" autofocus></div>
+			<div style="width: 20%; float:left;"><input type="text" class="form-control" name="nhap_msnv" id="nhap_msnv" autofocus placeholder="EMPLOYEE ID" required></div>
+			<div style="width: 20%; float:left;"><input type="text" class="form-control" name="nhap_mskhungtu" id="nhap_mskhungtu" autofocus placeholder="COLUMN ID" required></div>
 			<input type="submit" name="xacnhan" id="xacnhan" value="SUBMIT" class="btn btn-primary">
+			<input type="button" name="xoa" id="xoa" value="CLEAR" class="btn btn-primary" onclick="document.getElementById('qtsx').reset();document.getElementById('nhap_msnv').focus();">
     	</div>
     	<div>
     	<fieldset>
@@ -212,7 +211,7 @@ form input#nhap_msnv{
 				<?php
 				if (isset($_POST['xacnhan']))
 					{
-						$tb =mysql_query("SELECT qtsx.msgd,giaidoan.tengd,mskhungtu,date_start,date_finish FROM qtsx INNER JOIN giaidoan WHERE qtsx.msgd=giaidoan.msgd AND msnv = '$_POST[nhap_msnv]'"); 
+						$tb =mysql_query("SELECT qtsx.msgd,giaidoan.tengd,mskhungtu,date_start,date_finish FROM qtsx INNER JOIN giaidoan WHERE qtsx.msgd=giaidoan.msgd AND msnv = '$_POST[nhap_msnv]' AND mskhungtu='$_POST[nhap_mskhungtu]'"); 
 						
 				?>
 						<table class="table table-stripedauto">
@@ -255,6 +254,7 @@ form input#nhap_msnv{
 				            ?>
 				            </tbody>     
 				            <?php 
+				             if (mysql_num_rows($tb)==0) echo '<script>alert("TASK IS NOT EXIST")</script>';
 				             }     
 				            ?>
 			            </table>       
